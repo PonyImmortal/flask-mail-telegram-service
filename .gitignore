@@ -16,6 +16,7 @@ wheels/
 .installed.cfg
 *.egg
 *.cfg
+*.pyc
 
 # Virtual environment
 env/
