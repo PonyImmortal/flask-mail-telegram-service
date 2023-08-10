@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  send_message_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - SMTP_SERVER
+      - SMTP_PORT
+      - SMTP_USERNAME
+      - SMTP_PASSWORD
+      - SENDER_EMAIL
+      - RECIPIENT_EMAIL
+      - EMAIL_SUBJECT
+      - BOT_TOKEN
+      - CHAT_ID
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["celery", "-A", "send_email_app.celery_app", "worker", "--loglevel=info"]
+    volumes:
+      - .:/app
+    environment:
+      - SMTP_SERVER
+      - SMTP_PORT
+      - SMTP_USERNAME
+      - SMTP_PASSWORD
+      - SENDER_EMAIL
+      - RECIPIENT_EMAIL
+      - EMAIL_SUBJECT
+      - BOT_TOKEN
+      - CHAT_ID
+    depends_on:
+      - redis

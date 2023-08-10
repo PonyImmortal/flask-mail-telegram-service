@@ -1,0 +1,10 @@
+CORS
+python-dotenv
+requests
+Flask
+flask-cors
+gunicorn
+celery[redis]
+python-telegram-bot==12.0.0
+
+
